@@ -1,2 +1,2 @@
 # GoWalkGamified
-This is the Gamified app for my thesis
+This is the Gamified application for my gamification thesis
