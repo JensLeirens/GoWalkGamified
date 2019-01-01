@@ -1,13 +1,16 @@
 package be.mafken.gowalkgamified.ui.scoreboard
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.mafken.gowalkgamified.R
+import be.mafken.gowalkgamified.extensions.nonNull
+import be.mafken.gowalkgamified.extensions.observe
+import kotlinx.android.synthetic.main.scoreboard_fragment.*
 
 class ScoreboardFragment : Fragment() {
 
@@ -15,19 +18,27 @@ class ScoreboardFragment : Fragment() {
         fun newInstance() = ScoreboardFragment()
     }
 
-    private lateinit var viewModel: ScoreboardViewModel
+    private val viewModel: ScoreboardViewModel by lazy {
+        ViewModelProviders.of(this).get(ScoreboardViewModel::class.java)
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private val userAdapter = UserAdapter()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.scoreboard_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ScoreboardViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getUserFromDatabase()
+        userRecycler.layoutManager = LinearLayoutManager(context)
+        userRecycler.adapter = userAdapter
+
+        viewModel.users.nonNull().observe(this){
+            userAdapter.users = it
+        }
     }
+
 
 }

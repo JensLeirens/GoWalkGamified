@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.walk.WalkFragment"
+    android:background="@color/colorBackground">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/walkDistanceEditLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/walkDistanceEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="4dp"
+            android:hint="Distance ( number in KM )"
+            android:maxLines="1"
+            android:padding="8dp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RelativeLayout
+        android:id="@+id/adminNotitieStartSecondsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_below="@id/walkDistanceEditLayout">
+
+        <TextView
+            android:id="@+id/adminNotitieStartSecondslbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:text="Time: "/>
+
+        <TextView
+            android:id="@+id/walkTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="00h:00m:00s"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/walkPickTimeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pick time"
+            android:padding="16dp"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_margin="16dp"
+            android:textColor="@android:color/white"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/walkSaveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:padding="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@android:color/white"/>
+
+</RelativeLayout>

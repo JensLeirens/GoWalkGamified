@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.scoreboard.ScoreboardFragment">
+    android:background="@color/colorBackground"
+    tools:context=".ui.home.HomeFragment"
+    android:padding="4dp">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/viewSeperator"
+        android:layout_alignParentTop="true"
+        tools:itemCount="4"
+        tools:listitem="@layout/user_card" />
 
-</FrameLayout>
+</RelativeLayout>

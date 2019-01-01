@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:animateLayoutChanges="true">
+
+    <TextView
+        android:id="@+id/timeTextPickerHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@id/timePickerHours"
+        android:layout_toStartOf="@+id/timeTextPickerMinutes"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:text="Hours"/>
+
+    <NumberPicker
+        android:id="@+id/timePickerHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeTextPickerHours"
+        android:layout_toStartOf="@+id/timePickerMinutes"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/timeTextPickerMinutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Minutes"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <NumberPicker
+        android:id="@+id/timePickerMinutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeTextPickerMinutes"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"/>
+
+    <TextView
+        android:id="@+id/timeTextPickerSeconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="26dp"
+        android:layout_toEndOf="@+id/timeTextPickerMinutes"
+        android:text="Seconds" />
+
+    <NumberPicker
+        android:id="@+id/timePickerSeconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeTextPickerSeconds"
+        android:layout_toEndOf="@+id/timePickerMinutes"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/timePickerOkBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timePickerMinutes"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignEnd="@id/timeTextPickerSeconds"
+        android:text="Ok"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@android:color/white"/>
+
+    <Button
+        android:id="@+id/timePickerCancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/timeTextPickerHours"
+        android:layout_below="@id/timePickerMinutes"
+        android:layout_marginTop="8dp"
+        android:text="Cancel"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@android:color/white"/>
+</RelativeLayout>

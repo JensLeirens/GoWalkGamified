@@ -5,4 +5,5 @@ data class User(val uid: String = "",
                 var name: String = "",
                 var imageUrl: String = "",
                 var totalDistance: Int = -1,
-                var totalTime: String = "")
+                var totalTime: String = "",
+                var totalScore: Int = -1)
