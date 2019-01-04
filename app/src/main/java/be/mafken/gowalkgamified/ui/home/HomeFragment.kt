@@ -12,6 +12,7 @@ import be.mafken.gowalkgamified.extensions.goToFragment
 import be.mafken.gowalkgamified.extensions.nonNull
 import be.mafken.gowalkgamified.extensions.observe
 import be.mafken.gowalkgamified.ui.walk.WalkFragment
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment() {
@@ -35,19 +36,22 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getWalkingsForUserFromDatabase()
-        walkRecycler.layoutManager = LinearLayoutManager(context)
-        walkRecycler.adapter = walkAdapter
+        FirebaseAuth.getInstance().currentUser?.let {
+            viewModel.getWalkingsForUserFromDatabase()
+            walkRecycler.layoutManager = LinearLayoutManager(context)
+            walkRecycler.adapter = walkAdapter
 
 
-        viewModel.walkList.nonNull().observe(this){
-            walkAdapter.walkings = it
-            updateUI()
+            viewModel.walkList.nonNull().observe(this){
+                walkAdapter.walkings = it
+                updateUI()
+            }
+
+            floatingActionButton.setOnClickListener {
+                activity?.goToFragment("Home", WalkFragment.newInstance())
+            }
         }
 
-        floatingActionButton.setOnClickListener {
-            activity?.goToFragment("Home", WalkFragment.newInstance())
-        }
     }
 
     fun updateUI(){
@@ -60,6 +64,6 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.saveUser()
+        viewModel.updateUser()
     }
 }

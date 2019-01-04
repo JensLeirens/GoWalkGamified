@@ -15,7 +15,9 @@ import be.mafken.gowalkgamified.data.service.TrackerService
 import be.mafken.gowalkgamified.extensions.gone
 import be.mafken.gowalkgamified.extensions.visible
 import be.mafken.gowalkgamified.model.Tracker
+import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
 
@@ -24,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        Fabric.with(this, Crashlytics())
         incrementAppOpendTracker()
         val user = FirebaseAuth.getInstance().currentUser
         user?.let {
@@ -187,6 +189,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onError(error: Throwable) {
             }
         })
+
     }
 
     fun updateUI() {

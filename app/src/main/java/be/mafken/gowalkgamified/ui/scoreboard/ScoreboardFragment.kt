@@ -30,7 +30,7 @@ class ScoreboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.incrementScoreboardOpendTracker()
         viewModel.getUserFromDatabase()
         userRecycler.layoutManager = LinearLayoutManager(context)
         userRecycler.adapter = userAdapter

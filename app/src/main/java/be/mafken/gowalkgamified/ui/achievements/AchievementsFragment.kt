@@ -1,13 +1,17 @@
 package be.mafken.gowalkgamified.ui.achievements
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.mafken.gowalkgamified.R
+import be.mafken.gowalkgamified.extensions.goToFragment
+import be.mafken.gowalkgamified.extensions.nonNull
+import be.mafken.gowalkgamified.extensions.observe
+import kotlinx.android.synthetic.main.achievements_fragment.*
 
 class AchievementsFragment : Fragment() {
 
@@ -15,7 +19,10 @@ class AchievementsFragment : Fragment() {
         fun newInstance() = AchievementsFragment()
     }
 
-    private lateinit var viewModel: AchievementsViewModel
+    private val viewModel: AchievementsViewModel by lazy {
+        ViewModelProviders.of(this).get(AchievementsViewModel::class.java)
+    }
+    private val userAdapter = UserAchievementAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,8 +33,18 @@ class AchievementsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AchievementsViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.incrementAchievementOpendTracker()
+        viewModel.getUsersFromDatabase()
+        achievementsRecycler.layoutManager = LinearLayoutManager(context)
+        achievementsRecycler.adapter = userAdapter
+
+        viewModel.users.nonNull().observe(this){
+            userAdapter.users = it
+        }
+
+        achievementsBtn.setOnClickListener {
+            activity?.goToFragment("achievements", UserAchievementFragment.newInstance())
+        }
     }
 
 }

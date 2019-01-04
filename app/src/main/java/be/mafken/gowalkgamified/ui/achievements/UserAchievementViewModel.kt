@@ -6,17 +6,24 @@ import be.mafken.gowalkgamified.data.OnServiceDataCallback
 import be.mafken.gowalkgamified.data.firebase.FirebaseServiceProvider
 import be.mafken.gowalkgamified.data.service.TrackerService
 import be.mafken.gowalkgamified.data.service.UserService
+import be.mafken.gowalkgamified.model.Achievement
 import be.mafken.gowalkgamified.model.Tracker
 import be.mafken.gowalkgamified.model.User
+import com.google.firebase.auth.FirebaseAuth
 
-class AchievementsViewModel : ViewModel() {
+class UserAchievementViewModel : ViewModel() {
     val userService: UserService = FirebaseServiceProvider.getFirebaseUserService()
-    val users : MutableLiveData<List<User>> = MutableLiveData()
+    val achievements : MutableLiveData<List<Achievement>> = MutableLiveData()
+    val user : MutableLiveData<User> = MutableLiveData()
 
-    fun getUsersFromDatabase(){
-        userService.loadUsersOnceFromDatabase(object: OnServiceDataCallback<List<User>>{
-            override fun onDataLoaded(data: List<User>) {
-                users.value = data
+    fun getAchievements(){
+        achievements.value = AchievementsGetter.getAchievements()
+    }
+
+    fun getUserFromDatabase(){
+        userService.loadUserOnce(FirebaseAuth.getInstance().currentUser!!.uid ,object: OnServiceDataCallback<User> {
+            override fun onDataLoaded(data: User) {
+                user.value = data
             }
 
             override fun onError(error: Throwable) {
@@ -24,11 +31,11 @@ class AchievementsViewModel : ViewModel() {
         })
     }
 
-    fun incrementAchievementOpendTracker(){
+    fun incrementUserAchievementOpendTracker(){
         val trackerService: TrackerService = FirebaseServiceProvider.getFirebaseTrackerService()
         trackerService.loadTrackerOnceFromDatabase(object : OnServiceDataCallback<Tracker>{
             override fun onDataLoaded(data: Tracker) {
-                data.achievementsOpend += 1
+                data.userAchievementsOpend += 1
                 trackerService.saveTrackerToDatabase(data)
 
             }

@@ -7,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import be.mafken.gowalkgamified.data.OnServiceDataCallback
 import be.mafken.gowalkgamified.data.firebase.FirebaseServiceProvider
 import be.mafken.gowalkgamified.data.service.UserService
+import be.mafken.gowalkgamified.extensions.goToFragment
 import be.mafken.gowalkgamified.extensions.goToFragmentWithoutBackstack
 import be.mafken.gowalkgamified.model.User
 import be.mafken.gowalkgamified.ui.achievements.AchievementsFragment
 import be.mafken.gowalkgamified.ui.home.HomeFragment
+import be.mafken.gowalkgamified.ui.profile.ProfileFragment
 import be.mafken.gowalkgamified.ui.scoreboard.ScoreboardFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -58,8 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menuUserBtn -> {
-            //val intent = Intent(this, ProfileActivity::class.java)
-            //startActivity(intent)
+            goToFragment("Home",ProfileFragment.newInstance())
             true
         }
 
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         val currentUser = User(uid = userId, email = email)
         var userAlreadyExists = false
 
-        userService.loadUsersFromDatabase(object : OnServiceDataCallback<List<User>> {
+        userService.loadUsersOnceFromDatabase(object : OnServiceDataCallback<List<User>> {
             override fun onDataLoaded(data: List<User>) {
                 data.forEach {
                     if(it.uid == currentUser.uid)

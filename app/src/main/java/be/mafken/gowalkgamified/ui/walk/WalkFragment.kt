@@ -31,6 +31,7 @@ class WalkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getWalkingsFromDatabase()
+        viewModel.getUser()
         viewModel.incrementWalkingsCreatedTracker()
         walkPickTimeBtn.setOnClickListener {
             val fragment = WalkTimePickerDialog()
@@ -56,9 +57,17 @@ class WalkFragment : Fragment() {
             }
 
             if(noError) {
-                calculateScore()
-                viewModel.saveWalkToDatabase()
-                activity?.onBackPressed()
+                if(viewModel.walk.value!!.amountKm == 573){
+                    Toast.makeText(context, "You have unlocked the mystery achievement!!!", Toast.LENGTH_LONG).show()
+                    viewModel.addMysteryAchievement()
+                    activity?.onBackPressed()
+                } else {
+                    if(walkFriendCheck.isChecked)
+                        viewModel.addWalkFriendAchievement()
+                    calculateScore()
+                    viewModel.saveWalkToDatabase()
+                    activity?.onBackPressed()
+                }
             }
         }
 
