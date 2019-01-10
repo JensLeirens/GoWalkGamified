@@ -5,9 +5,9 @@ import be.mafken.gowalkgamified.model.Tracker
 
 
 interface TrackerService {
-    
-    fun loadTrackerOnceFromDatabase(callback: OnServiceDataCallback<Tracker>)
-    
-    fun saveTrackerToDatabase(tracker: Tracker)
+
+ fun loadTrackerOnceFromDatabase(callback: OnServiceDataCallback<Tracker>)
+
+ fun saveTrackerToDatabase(tracker: Tracker)
 
 }

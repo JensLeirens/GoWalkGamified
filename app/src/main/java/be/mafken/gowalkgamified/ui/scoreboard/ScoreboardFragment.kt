@@ -14,31 +14,37 @@ import kotlinx.android.synthetic.main.scoreboard_fragment.*
 
 class ScoreboardFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ScoreboardFragment()
-    }
+ companion object {
+  fun newInstance() = ScoreboardFragment()
+ }
 
-    private val viewModel: ScoreboardViewModel by lazy {
-        ViewModelProviders.of(this).get(ScoreboardViewModel::class.java)
-    }
+ private val viewModel: ScoreboardViewModel by lazy {
+  ViewModelProviders.of(this).
+   get(ScoreboardViewModel::class.java)
+ }
 
-    private val userAdapter = UserAdapter()
+ private val userAdapter = UserAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.scoreboard_fragment, container, false)
-    }
+ override fun onCreateView(
+  inflater: LayoutInflater,
+  container: ViewGroup?,
+  savedInstanceState: Bundle?
+ ): View? {
+  return inflater.inflate(R.layout.scoreboard_fragment,
+   container, false)
+ }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.incrementScoreboardOpendTracker()
-        viewModel.getUserFromDatabase()
-        userRecycler.layoutManager = LinearLayoutManager(context)
-        userRecycler.adapter = userAdapter
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  super.onViewCreated(view, savedInstanceState)
+  viewModel.incrementScoreboardOpendTracker()
+  viewModel.getUserFromDatabase()
+  userRecycler.layoutManager = LinearLayoutManager(context)
+  userRecycler.adapter = userAdapter
 
-        viewModel.users.nonNull().observe(this){
-            userAdapter.users = it
-        }
-    }
+  viewModel.users.nonNull().observe(this) {
+   userAdapter.users = it
+  }
+ }
 
 
 }

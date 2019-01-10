@@ -6,14 +6,14 @@ import be.mafken.gowalkgamified.model.Walk
 
 interface WalkService {
 
-    fun loadWalksFromDatabase(callback: OnServiceDataCallback<List<Walk>>)
+ fun loadWalksFromDatabase(callback: OnServiceDataCallback<List<Walk>>)
 
-    fun loadWalksOnceFromDatabase(callback: OnServiceDataCallback<List<Walk>>)
+ fun loadWalksOnceFromDatabase(callback: OnServiceDataCallback<List<Walk>>)
 
-    fun loadWalk(walkId: Int, callback: OnServiceDataCallback<Walk>)
+ fun loadWalk(walkId: Int, callback: OnServiceDataCallback<Walk>)
 
-    fun saveWalkToDatabase(walk: Walk)
+ fun saveWalkToDatabase(walk: Walk)
 
-    fun deleteWalk(walkId: Int)
+ fun deleteWalk(walkId: Int)
 
 }

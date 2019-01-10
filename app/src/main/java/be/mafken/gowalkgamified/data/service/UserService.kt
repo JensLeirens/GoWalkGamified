@@ -5,14 +5,14 @@ import be.mafken.gowalkgamified.model.User
 
 interface UserService {
 
-    fun loadUsersFromDatabase(callback: OnServiceDataCallback<List<User>>)
+ fun loadUsersFromDatabase(callback: OnServiceDataCallback<List<User>>)
 
-    fun loadUsersOnceFromDatabase(callback: OnServiceDataCallback<List<User>>)
+ fun loadUsersOnceFromDatabase(callback: OnServiceDataCallback<List<User>>)
 
-    fun loadUser(userId: String, callback: OnServiceDataCallback<User>)
+ fun loadUser(userId: String, callback: OnServiceDataCallback<User>)
 
-    fun loadUserOnce(userId: String, callback: OnServiceDataCallback<User>)
+ fun loadUserOnce(userId: String, callback: OnServiceDataCallback<User>)
 
-    fun saveUserToDatabase(user: User)
+ fun saveUserToDatabase(user: User)
 
 }

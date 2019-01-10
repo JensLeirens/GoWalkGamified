@@ -14,84 +14,113 @@ import kotlin.random.Random
 
 class WalkFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = WalkFragment()
+ companion object {
+  fun newInstance() = WalkFragment()
+ }
+
+ private val viewModel: WalkViewModel by lazy {
+  ViewModelProviders.of(this).get(WalkViewModel::class.java)
+ }
+
+ override fun onCreateView(
+  inflater: LayoutInflater, container: ViewGroup?,
+  savedInstanceState: Bundle?
+ ): View? {
+  return inflater.inflate(R.layout.walk_fragment, container, false)
+ }
+
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  super.onViewCreated(view, savedInstanceState)
+  viewModel.getWalkingsFromDatabase()
+  viewModel.getUser()
+  viewModel.incrementWalkingsCreatedTracker()
+  walkPickTimeBtn.setOnClickListener {
+   val fragment = WalkTimePickerDialog()
+   fragment.onOkClicked = object :
+    WalkTimePickerDialog.OnDialogOkClicked {
+    override fun onOkClicked(hours: Int, minutes: Int, seconds: Int) {
+     viewModel.walk.value!!.time =
+      calculateSeconds(hours, minutes, seconds)
+     viewModel.walk.value!!.displayTime =
+      "${hours}h : ${minutes}m : ${seconds}s"
+     walkTimeText.text = viewModel.walk.value!!.displayTime
     }
 
-    private val viewModel: WalkViewModel by lazy {
-        ViewModelProviders.of(this).get(WalkViewModel::class.java)
+   }
+   fragment.show(fragmentManager!!, "Timepicker Dialog")
+  }
+
+  walkSaveBtn.setOnClickListener {
+
+   var noError = true
+   try {
+    viewModel.walk.value?.amountKm =
+     walkDistanceEdit.text.toString().toInt()
+   } catch (e: NumberFormatException) {
+    noError = false
+    walkDistanceEdit.error = "This has to be a number. ex: 5 or 2"
+   }
+
+   if (noError) {
+    if (viewModel.walk.value!!.amountKm == 573) {
+     Toast.makeText(
+      context,
+      "You have unlocked the mystery achievement!!!",
+      Toast.LENGTH_LONG
+     ).show()
+     viewModel.addMysteryAchievement()
+     activity?.onBackPressed()
+    } else {
+     if (walkFriendCheck.isChecked)
+      viewModel.addWalkFriendAchievement()
+     calculateScore()
+     viewModel.saveWalkToDatabase()
+     activity?.onBackPressed()
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.walk_fragment, container, false)
-    }
+   }
+  }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.getWalkingsFromDatabase()
-        viewModel.getUser()
-        viewModel.incrementWalkingsCreatedTracker()
-        walkPickTimeBtn.setOnClickListener {
-            val fragment = WalkTimePickerDialog()
-            fragment.onOkClicked = object : WalkTimePickerDialog.OnDialogOkClicked {
-                override fun onOkClicked(hours: Int, minutes: Int, seconds: Int) {
-                    viewModel.walk.value!!.time = calculateSeconds(hours,minutes,seconds)
-                    viewModel.walk.value!!.displayTime = "${hours}h : ${minutes}m : ${seconds}s"
-                    walkTimeText.text = viewModel.walk.value!!.displayTime
-                }
+ }
 
-            }
-            fragment.show(fragmentManager!!, "Timepicker Dialog")
-        }
+ fun calculateSeconds(hours: Int, minutes: Int, seconds: Int) =
+  seconds + minutes * 60 + hours * 60 * 60
 
-        walkSaveBtn.setOnClickListener {
+ private fun calculateScore() {
+  val score = (viewModel.walk.value!!.amountKm * 200) -
+   (viewModel.walk.value!!.time / 10)
+  val random = Random.nextInt(0, 100)
 
-            var noError = true
-            try {
-                viewModel.walk.value?.amountKm = walkDistanceEdit.text.toString().toInt()
-            } catch (e: NumberFormatException){
-                noError = false
-                walkDistanceEdit.error = "This has to be a number. ex: 5 or 2"
-            }
+  Timber.d(random.toString())
 
-            if(noError) {
-                if(viewModel.walk.value!!.amountKm == 573){
-                    Toast.makeText(context, "You have unlocked the mystery achievement!!!", Toast.LENGTH_LONG).show()
-                    viewModel.addMysteryAchievement()
-                    activity?.onBackPressed()
-                } else {
-                    if(walkFriendCheck.isChecked)
-                        viewModel.addWalkFriendAchievement()
-                    calculateScore()
-                    viewModel.saveWalkToDatabase()
-                    activity?.onBackPressed()
-                }
-            }
-        }
+  if (random < 11) {
+   Toast.makeText(
+    context,
+    "Score has been doubled! Congratz, keep up the walking!",
+    Toast.LENGTH_LONG
+   ).show()
+   viewModel.walk.value!!.score = score * 2
+  } else
+   viewModel.walk.value!!.score = score
 
-    }
-    fun calculateSeconds(hours: Int, minutes: Int, seconds: Int) = seconds + minutes * 60 + hours * 60 * 60
+  when (score) {
+   in 0..99 -> Toast.makeText(
+    context,
+    "That can be better! try to walk faster next time.",
+    Toast.LENGTH_LONG
+   ).show()
+   in 99..199 -> Toast.makeText(
+    context,
+    "Not bad for a small walk! try to walk farther next time.",
+    Toast.LENGTH_LONG
+   ).show()
+   in 200..399 -> Toast.makeText(
+    context,
+    "Not bad, next time try a faster phase for a higher score!",
+    Toast.LENGTH_LONG
+   ).show()
+   else -> Toast.makeText(context, "Nice walk, keep it up!",
+    Toast.LENGTH_LONG).show()
+  }
 
-    private fun calculateScore(){
-        val score = (viewModel.walk.value!!.amountKm * 200) - (viewModel.walk.value!!.time / 10)
-        val random = Random.nextInt(0,100)
-
-        Timber.d(random.toString())
-
-        if (random < 11) {
-            Toast.makeText(context, "Score has been doubled! Congratz, keep up the walking!", Toast.LENGTH_LONG).show()
-            viewModel.walk.value!!.score = score * 2
-        } else
-            viewModel.walk.value!!.score = score
-
-        when (score) {
-            in 0..99 -> Toast.makeText(context, "That can be better! try to walk faster next time.", Toast.LENGTH_LONG).show()
-            in 99..199 -> Toast.makeText(context, "Not bad for a small walk! try to walk farther next time.", Toast.LENGTH_LONG).show()
-            in 200..399 -> Toast.makeText(context, "Not bad, next time try a faster phase for a higher score!", Toast.LENGTH_LONG).show()
-            else -> Toast.makeText(context, "Nice walk, keep it up!", Toast.LENGTH_LONG).show()
-        }
-
-    }
+ }
 }

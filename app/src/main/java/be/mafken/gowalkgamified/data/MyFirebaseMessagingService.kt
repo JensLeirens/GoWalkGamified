@@ -5,7 +5,7 @@ import timber.log.Timber
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    override fun onNewToken(token: String?) {
-        Timber.d("Refreshed token: $token")
-    }
+ override fun onNewToken(token: String?) {
+  Timber.d("Refreshed token: $token")
+ }
 }

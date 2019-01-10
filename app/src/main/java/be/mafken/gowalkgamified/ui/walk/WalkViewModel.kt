@@ -14,79 +14,86 @@ import be.mafken.gowalkgamified.ui.achievements.AchievementsGetter
 import com.google.firebase.auth.FirebaseAuth
 
 class WalkViewModel : ViewModel() {
-    val userService: UserService = FirebaseServiceProvider.getFirebaseUserService()
-    private val walkService: WalkService = FirebaseServiceProvider.getWalkService()
-    val walk : MutableLiveData<Walk> = MutableLiveData()
-    var user = User()
+ val userService: UserService =
+  FirebaseServiceProvider.getFirebaseUserService()
+ private val walkService: WalkService =
+  FirebaseServiceProvider.getWalkService()
+ val walk: MutableLiveData<Walk> = MutableLiveData()
+ var user = User()
 
-    fun getWalkingsFromDatabase(){
-        walk.value = Walk(userId = FirebaseAuth.getInstance().uid!!)
-        walkService.loadWalksOnceFromDatabase(object: OnServiceDataCallback<List<Walk>>{
-            override fun onDataLoaded(data: List<Walk>) {
-                walk.value?.id = getNewIdForWalk(data)
-            }
+ fun getWalkingsFromDatabase() {
+  walk.value = Walk(userId = FirebaseAuth.getInstance().uid!!)
+  walkService.loadWalksOnceFromDatabase(
+   object : OnServiceDataCallback<List<Walk>> {
+   override fun onDataLoaded(data: List<Walk>) {
+    walk.value?.id = getNewIdForWalk(data)
+   }
 
-            override fun onError(error: Throwable) {
-                //ToDo: implement
+   override fun onError(error: Throwable) {
+   }
+  })
+ }
 
-            }
-        })
+ fun getUser() {
+
+  userService.loadUserOnce(
+   FirebaseAuth.getInstance().currentUser!!.uid,
+   object : OnServiceDataCallback<User> {
+    override fun onDataLoaded(data: User) {
+     user = data
     }
 
-    fun getUser(){
-
-        userService.loadUserOnce(FirebaseAuth.getInstance().currentUser!!.uid, object : OnServiceDataCallback<User>{
-            override fun onDataLoaded(data: User) {
-                user = data
-            }
-
-            override fun onError(error: Throwable) {
-            }
-        })
-
+    override fun onError(error: Throwable) {
     }
+   })
 
-    fun incrementWalkingsCreatedTracker(){
-        val trackerService: TrackerService = FirebaseServiceProvider.getFirebaseTrackerService()
-        trackerService.loadTrackerOnceFromDatabase(object : OnServiceDataCallback<Tracker> {
-            override fun onDataLoaded(data: Tracker) {
-                data.addWalkingScreenOpend += 1
-                trackerService.saveTrackerToDatabase(data)
+ }
 
-            }
+ fun incrementWalkingsCreatedTracker() {
+  val trackerService: TrackerService =
+   FirebaseServiceProvider.getFirebaseTrackerService()
+  trackerService.loadTrackerOnceFromDatabase(
+   object : OnServiceDataCallback<Tracker> {
+   override fun onDataLoaded(data: Tracker) {
+    data.addWalkingScreenOpend += 1
+    trackerService.saveTrackerToDatabase(data)
 
-            override fun onError(error: Throwable) {
-            }
-        })
-    }
+   }
 
-    fun saveWalkToDatabase(){
-        walkService.saveWalkToDatabase(walk.value!!)
-    }
+   override fun onError(error: Throwable) {
+   }
+  })
+ }
 
-    fun addMysteryAchievement() {
-        val achievements = AchievementsGetter.getAchievements()
+ fun saveWalkToDatabase() {
+  walkService.saveWalkToDatabase(walk.value!!)
+ }
 
-        if (!user.completedAchievements.contains(achievements[0].id))
-            user.completedAchievements.add(achievements[0].id)
+ fun addMysteryAchievement() {
+  val achievements =
+   AchievementsGetter.getAchievements()
 
-        userService.saveUserToDatabase(user)
+  if (!user.completedAchievements.contains(achievements[0].id))
+   user.completedAchievements.add(achievements[0].id)
 
-    }
+  userService.saveUserToDatabase(user)
 
-    fun addWalkFriendAchievement(){
-        val achievements = AchievementsGetter.getAchievements()
+ }
 
-        if (!user.completedAchievements.contains(achievements[15].id))
-            user.completedAchievements.add(achievements[15].id)
+ fun addWalkFriendAchievement() {
+  val achievements =
+   AchievementsGetter.getAchievements()
 
-        userService.saveUserToDatabase(user)
-    }
+  if (!user.completedAchievements.contains(achievements[15].id))
+   user.completedAchievements.add(achievements[15].id)
 
-    fun getNewIdForWalk(walkings: List<Walk>): Int{
-        return if(walkings.isNotEmpty()) {
-            walkings.sortedBy{ it.id }.last().id + 1
-        } else 0
+  userService.saveUserToDatabase(user)
+ }
 
-    }
+ fun getNewIdForWalk(walkings: List<Walk>): Int {
+  return if (walkings.isNotEmpty()) {
+   walkings.sortedBy { it.id }.last().id + 1
+  } else 0
+
+ }
 }
